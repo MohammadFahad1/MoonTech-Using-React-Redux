@@ -1,9 +1,14 @@
 import React from "react";
 import { BiListPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/actionCreators/productActions";
+import { useLocation } from "react-router-dom";
+import { addToCart, removeFromCart } from "../redux/actionCreators/productActions";
 
 const ProductCard = ({ product }) => {
+
+  const isCart = useLocation().pathname.includes('/cart');
+
+  console.log(isCart)
 
   const dispatch = useDispatch()
 
@@ -20,13 +25,14 @@ const ProductCard = ({ product }) => {
           <li className='text-sm '><b>Price: </b>{product.price}</li>
         </ul>
       </div>
-      <div className='flex gap-2 mt-5'>
+      <div className='flex gap-2 my-5'>
         <button
           className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'
           onClick={() => dispatch(addToCart(product))}
         >
           Add to cart
         </button>
+
         <button
           title='Add to wishlist'
           className='bg-indigo-500  py-1 px-2 rounded-full'
@@ -34,6 +40,16 @@ const ProductCard = ({ product }) => {
           <BiListPlus className='text-white' />
         </button>
       </div>
+
+      {
+        isCart && <button
+          className='bg-red-500 rounded max-h-[35px] py-1 px-2 flex-1 text-white text-bold'
+          onClick={() => dispatch(removeFromCart(product))}
+        >
+          Remove From Cart
+        </button>
+      }
+
     </div>
   );
 };
